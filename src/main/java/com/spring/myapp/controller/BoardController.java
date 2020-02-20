@@ -23,26 +23,26 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 
-	//°Ô½Ã±Û ¸®½ºÆ® Á¶È¸
+	//ê²Œì‹œê¸€ ë¦¬ìŠ¤íŠ¸ ì¡°íšŒ
 	@RequestMapping(value = "/board/list")
 	public String boardList(@RequestParam Map<String, Object> paramMap, Model model) {
 
-		//Á¶È¸ ÇÏ·Á´Â ÆäÀÌÁö
+		//ì¡°íšŒ í•˜ë ¤ëŠ” í˜ì´ì§€ baiaba
 		int startPage = (paramMap.get("startPage")!=null?Integer.parseInt(paramMap.get("startPage").toString()):1);
-		//ÇÑÆäÀÌÁö¿¡ º¸¿©ÁÙ ¸®½ºÆ® ¼ö
+		//í•œí˜ì´ì§€ì— ë³´ì—¬ì¤„ ë¦¬ìŠ¤íŠ¸ ìˆ˜
 		int visiblePages = (paramMap.get("visiblePages")!=null?Integer.parseInt(paramMap.get("visiblePages").toString()):10);
-		//ÀÏ´Ü ÀüÃ¼ °Ç¼ö¸¦ °¡Á®¿Â´Ù.
+		//ì¼ë‹¨ ì „ì²´ ê±´ìˆ˜ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 		int totalCnt = boardService.getContentCnt(paramMap);
 
 
-		//¾Æ·¡ 1,2´Â ½ÇÁ¦ °³¹ß¿¡¼­´Â class·Î »©ÁØ´Ù. (¿©±â¼­´Â ÀÌÇØ¸¦ À§ÇØ Á÷Á¢ ÀûÀ½)
-		//1.ÇÏ´Ü ÆäÀÌÁö ³×ºñ°ÔÀÌ¼Ç¿¡¼­ º¸¿©ÁÙ ¸®½ºÆ® ¼ö¸¦ ±¸ÇÑ´Ù.
+		//ì•„ë˜ 1,2ëŠ” ì‹¤ì œ ê°œë°œì—ì„œëŠ” classë¡œ ë¹¼ì¤€ë‹¤. (ì—¬ê¸°ì„œëŠ” ì´í•´ë¥¼ ìœ„í•´ ì§ì ‘ ì ìŒ)
+		//1.í•˜ë‹¨ í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì—ì„œ ë³´ì—¬ì¤„ ë¦¬ìŠ¤íŠ¸ ìˆ˜ë¥¼ êµ¬í•œë‹¤.
 		BigDecimal decimal1 = new BigDecimal(totalCnt);
 		BigDecimal decimal2 = new BigDecimal(visiblePages);
 		BigDecimal totalPage = decimal1.divide(decimal2, 0, BigDecimal.ROUND_UP);
 
 		int startLimitPage = 0;
-		//2.mysql limit ¹üÀ§¸¦ ±¸ÇÏ±â À§ÇØ °è»ê
+		//2.mysql limit ë²”ìœ„ë¥¼ êµ¬í•˜ê¸° ìœ„í•´ ê³„ì‚°
 		if(startPage==1){
 			startLimitPage = 0;
 		}else{
@@ -52,17 +52,17 @@ public class BoardController {
 		paramMap.put("start", startLimitPage);
 		paramMap.put("end", visiblePages);
 
-		//jsp ¿¡¼­ º¸¿©ÁÙ Á¤º¸ ÃßÃâ
-		model.addAttribute("startPage", startPage+"");//ÇöÀç ÆäÀÌÁö      
-		model.addAttribute("totalCnt", totalCnt);//ÀüÃ¼ °Ô½Ã¹°¼ö
-		model.addAttribute("totalPage", totalPage);//ÆäÀÌÁö ³×ºñ°ÔÀÌ¼Ç¿¡ º¸¿©ÁÙ ¸®½ºÆ® ¼ö
-		model.addAttribute("boardList", boardService.getContentList(paramMap));//°Ë»ö
+		//jsp ì—ì„œ ë³´ì—¬ì¤„ ì •ë³´ ì¶”ì¶œ
+		model.addAttribute("startPage", startPage+"");//í˜„ì¬ í˜ì´ì§€      
+		model.addAttribute("totalCnt", totalCnt);//ì „ì²´ ê²Œì‹œë¬¼ìˆ˜
+		model.addAttribute("totalPage", totalPage);//í˜ì´ì§€ ë„¤ë¹„ê²Œì´ì…˜ì— ë³´ì—¬ì¤„ ë¦¬ìŠ¤íŠ¸ ìˆ˜
+		model.addAttribute("boardList", boardService.getContentList(paramMap));//ê²€ìƒ‰
 
 		return "boardList";
 
 	}
 
-	//°Ô½Ã±Û »ó¼¼ º¸±â
+	//ê²Œì‹œê¸€ ìƒì„¸ ë³´ê¸°
 	@RequestMapping(value = "/board/view")
 	public String boardView(@RequestParam Map<String, Object> paramMap, Model model) {
 
@@ -73,24 +73,24 @@ public class BoardController {
 
 	}
 
-	//°Ô½Ã±Û µî·Ï ¹× ¼öÁ¤
+	//ê²Œì‹œê¸€ ë“±ë¡ ë° ìˆ˜ì •
 	@RequestMapping(value = "/board/edit")
 	public String boardEdit(HttpServletRequest request, @RequestParam Map<String, Object> paramMap, Model model) {
 
-		//Referer °Ë»ç
+		//Referer ê²€ì‚¬
 		String Referer = request.getHeader("referer");
 
-		if(Referer!=null){//URL·Î Á÷Á¢ Á¢±Ù ºÒ°¡
-			if(paramMap.get("id") != null){ //°Ô½Ã±Û ¼öÁ¤
+		if(Referer!=null){//URLë¡œ ì§ì ‘ ì ‘ê·¼ ë¶ˆê°€
+			if(paramMap.get("id") != null){ //ê²Œì‹œê¸€ ìˆ˜ì •
 				if(Referer.indexOf("/board/view")>-1){
 
-					//Á¤º¸¸¦ °¡Á®¿Â´Ù.
+					//ì •ë³´ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 					model.addAttribute("boardView", boardService.getContentView(paramMap));
 					return "boardEdit";
 				}else{
 					return "redirect:/board/list";
 				}
-			}else{ //°Ô½Ã±Û µî·Ï
+			}else{ //ê²Œì‹œê¸€ ë“±ë¡
 				if(Referer.indexOf("/board/list")>-1){
 					return "boardEdit";
 				}else{
@@ -103,138 +103,138 @@ public class BoardController {
 
 	}
 
-	//AJAX È£Ãâ (°Ô½Ã±Û µî·Ï)
+	//AJAX í˜¸ì¶œ (ê²Œì‹œê¸€ ë“±ë¡)
 	@RequestMapping(value="/board/save", method=RequestMethod.POST)
 	@ResponseBody
 	public Object boardSave(@RequestParam Map<String, Object> paramMap) {
 
-		//¸®ÅÏ°ª
+		//ë¦¬í„´ê°’
 		Map<String, Object> retVal = new HashMap<String, Object>();
 
-		//ÆĞ½º¿öµå ¾ÏÈ£È­
+		//íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™”
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		String password = encoder.encodePassword(paramMap.get("password").toString(), null);
 		paramMap.put("password", password);
 
-		//Á¤º¸ÀÔ·Â
+		//ì •ë³´ì…ë ¥
 		int result = boardService.regContent(paramMap);
 
 		if(result>0){
 			retVal.put("code", "OK");
-			retVal.put("message", "µî·Ï¿¡ ¼º°ø ÇÏ¿´½À´Ï´Ù.");
+			retVal.put("message", "ë“±ë¡ì— ì„±ê³µ í•˜ì˜€ìŠµë‹ˆë‹¤.");
 		}else{
 			retVal.put("code", "FAIL");
-			retVal.put("message", "µî·Ï¿¡ ½ÇÆĞ ÇÏ¿´½À´Ï´Ù.");
+			retVal.put("message", "ë“±ë¡ì— ì‹¤íŒ¨ í•˜ì˜€ìŠµë‹ˆë‹¤.");
 		}
 
 		return retVal;
 
 	}
 
-	//AJAX È£Ãâ (°Ô½Ã±Û »èÁ¦)
+	//AJAX í˜¸ì¶œ (ê²Œì‹œê¸€ ì‚­ì œ)
 	@RequestMapping(value="/board/del", method=RequestMethod.POST)
 	@ResponseBody
 	public Object boardDel(@RequestParam Map<String, Object> paramMap) {
 
-		//¸®ÅÏ°ª
+		//ë¦¬í„´ê°’
 		Map<String, Object> retVal = new HashMap<String, Object>();
 
-		//ÆĞ½º¿öµå ¾ÏÈ£È­
+		//íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™”
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		String password = encoder.encodePassword(paramMap.get("password").toString(), null);
 		paramMap.put("password", password);
 
-		//Á¤º¸ÀÔ·Â
+		//ì •ë³´ì…ë ¥
 		int result = boardService.delBoard(paramMap);
 
 		if(result>0){
 			retVal.put("code", "OK");
 		}else{
 			retVal.put("code", "FAIL");
-			retVal.put("message", "ÆĞ½º¿öµå¸¦ È®ÀÎÇØÁÖ¼¼¿ä.");
+			retVal.put("message", "íŒ¨ìŠ¤ì›Œë“œë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.");
 		}
 
 		return retVal;
 
 	}
 
-	//AJAX È£Ãâ (°Ô½Ã±Û ÆĞ½º¿öµå È®ÀÎ)
+	//AJAX í˜¸ì¶œ (ê²Œì‹œê¸€ íŒ¨ìŠ¤ì›Œë“œ í™•ì¸)
 	@RequestMapping(value="/board/check", method=RequestMethod.POST)
 	@ResponseBody
 	public Object boardCheck(@RequestParam Map<String, Object> paramMap) {
 
-		//¸®ÅÏ°ª
+		//ë¦¬í„´ê°’
 		Map<String, Object> retVal = new HashMap<String, Object>();
 
-		//ÆĞ½º¿öµå ¾ÏÈ£È­
+		//íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™”
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		String password = encoder.encodePassword(paramMap.get("password").toString(), null);
 		paramMap.put("password", password);
 
-		//Á¤º¸ÀÔ·Â
+		//ì •ë³´ì…ë ¥
 		int result = boardService.getBoardCheck(paramMap);
 
 		if(result>0){
 			retVal.put("code", "OK");
 		}else{
 			retVal.put("code", "FAIL");
-			retVal.put("message", "ÆĞ½º¿öµå¸¦ È®ÀÎÇØÁÖ¼¼¿ä.");
+			retVal.put("message", "íŒ¨ìŠ¤ì›Œë“œë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.");
 		}
 
 		return retVal;
 
 	}
 
-	//AJAX È£Ãâ (´ñ±Û µî·Ï)
+	//AJAX í˜¸ì¶œ (ëŒ“ê¸€ ë“±ë¡)
 	@RequestMapping(value="/board/reply/save", method=RequestMethod.POST)
 	@ResponseBody
 	public Object boardReplySave(@RequestParam Map<String, Object> paramMap) {
 
-		//¸®ÅÏ°ª
+		//ë¦¬í„´ê°’
 		Map<String, Object> retVal = new HashMap<String, Object>();
 
-		//ÆĞ½º¿öµå ¾ÏÈ£È­
+		//íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™”
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		String password = encoder.encodePassword(paramMap.get("reply_password").toString(), null);
 		paramMap.put("reply_password", password);
 
-		//Á¤º¸ÀÔ·Â
+		//ì •ë³´ì…ë ¥
 		int result = boardService.regReply(paramMap);
 
 		if(result>0){
 			retVal.put("code", "OK");
 			retVal.put("reply_id", paramMap.get("reply_id"));
-			retVal.put("message", "µî·Ï¿¡ ¼º°ø ÇÏ¿´½À´Ï´Ù.");
+			retVal.put("message", "ë“±ë¡ì— ì„±ê³µ í•˜ì˜€ìŠµë‹ˆë‹¤.");
 		}else{
 			retVal.put("code", "FAIL");
-			retVal.put("message", "µî·Ï¿¡ ½ÇÆĞ ÇÏ¿´½À´Ï´Ù.");
+			retVal.put("message", "ë“±ë¡ì— ì‹¤íŒ¨ í•˜ì˜€ìŠµë‹ˆë‹¤.");
 		}
 
 		return retVal;
 
 	}
 
-	//AJAX È£Ãâ (´ñ±Û »èÁ¦)
+	//AJAX í˜¸ì¶œ (ëŒ“ê¸€ ì‚­ì œ)
 	@RequestMapping(value="/board/reply/del", method=RequestMethod.POST)
 	@ResponseBody
 	public Object boardReplyDel(@RequestParam Map<String, Object> paramMap) {
 
-		//¸®ÅÏ°ª
+		//ë¦¬í„´ê°’
 		Map<String, Object> retVal = new HashMap<String, Object>();
 
-		//ÆĞ½º¿öµå ¾ÏÈ£È­
+		//íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™”
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		String password = encoder.encodePassword(paramMap.get("reply_password").toString(), null);
 		paramMap.put("reply_password", password);
 
-		//Á¤º¸ÀÔ·Â
+		//ì •ë³´ì…ë ¥
 		int result = boardService.delReply(paramMap);
 
 		if(result>0){
 			retVal.put("code", "OK");
 		}else{
 			retVal.put("code", "FAIL");
-			retVal.put("message", "»èÁ¦¿¡ ½ÇÆĞÇß½À´Ï´Ù. ÆĞ½º¿öµå¸¦ È®ÀÎÇØÁÖ¼¼¿ä.");
+			retVal.put("message", "ì‚­ì œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. íŒ¨ìŠ¤ì›Œë“œë¥¼ í™•ì¸í•´ì£¼ì„¸ìš”.");
 		}
 
 		return retVal;
