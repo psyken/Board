@@ -58,7 +58,7 @@ public class BoardServiceImpl implements BoardService {
 		//통합
 		List<BoardReply> newBoardReplyList = new ArrayList<BoardReply>();
 
-		//1.부모와 자식 분리
+		//1.부모와 자식 분리 테스트
 		for(BoardReply boardReply: boardReplyList){
 			if(boardReply.getDepth().equals("0")){
 				boardReplyListParent.add(boardReply);
