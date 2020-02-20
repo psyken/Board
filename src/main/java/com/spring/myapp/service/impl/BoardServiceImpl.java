@@ -49,16 +49,16 @@ public class BoardServiceImpl implements BoardService {
 
 		List<BoardReply> boardReplyList = boardDao.getReplyList(paramMap);
 
-		//msyql ¿¡¼­ °èÃşÀû Äõ¸®°¡ ¾î·Á¿ì´Ï ¿©±â¼­ ±×³É ÇØ°áÇÏÀÚ
+		//msyql ì—ì„œ ê³„ì¸µì  ì¿¼ë¦¬ê°€ ì–´ë ¤ìš°ë‹ˆ ì—¬ê¸°ì„œ ê·¸ëƒ¥ í•´ê²°í•˜ì
 
-		//ºÎ¸ğ
+		//ë¶€ëª¨
 		List<BoardReply> boardReplyListParent = new ArrayList<BoardReply>();
-		//ÀÚ½Ä
+		//ìì‹
 		List<BoardReply> boardReplyListChild = new ArrayList<BoardReply>();
-		//ÅëÇÕ
+		//í†µí•©
 		List<BoardReply> newBoardReplyList = new ArrayList<BoardReply>();
 
-		//1.ºÎ¸ğ¿Í ÀÚ½Ä ºĞ¸®
+		//1.ë¶€ëª¨ì™€ ìì‹ ë¶„ë¦¬
 		for(BoardReply boardReply: boardReplyList){
 			if(boardReply.getDepth().equals("0")){
 				boardReplyListParent.add(boardReply);
@@ -67,13 +67,13 @@ public class BoardServiceImpl implements BoardService {
 			}
 		}
 
-		//2.ºÎ¸ğ¸¦ µ¹¸°´Ù.
+		//2.ë¶€ëª¨ë¥¼ ëŒë¦°ë‹¤.
 		for(BoardReply boardReplyParent: boardReplyListParent){
-			//2-1. ºÎ¸ğ´Â ¹«Á¶°Ç ³Ö´Â´Ù.
+			//2-1. ë¶€ëª¨ëŠ” ë¬´ì¡°ê±´ ë„£ëŠ”ë‹¤.
 			newBoardReplyList.add(boardReplyParent);
-			//3.ÀÚ½ÄÀ» µ¹¸°´Ù.
+			//3.ìì‹ì„ ëŒë¦°ë‹¤.
 			for(BoardReply boardReplyChild: boardReplyListChild){
-				//3-1. ºÎ¸ğÀÇ ÀÚ½ÄÀÎ °Íµé¸¸ ³Ö´Â´Ù.
+				//3-1. ë¶€ëª¨ì˜ ìì‹ì¸ ê²ƒë“¤ë§Œ ë„£ëŠ”ë‹¤.
 				if(boardReplyParent.getReply_id().equals(boardReplyChild.getParent_id())){
 					newBoardReplyList.add(boardReplyChild);
 				}
@@ -82,7 +82,7 @@ public class BoardServiceImpl implements BoardService {
 
 		}
 
-		//Á¤¸®ÇÑ list return
+		//ì •ë¦¬í•œ list return
 		return newBoardReplyList;
 	}
 
